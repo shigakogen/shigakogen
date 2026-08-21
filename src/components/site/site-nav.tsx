@@ -1,9 +1,10 @@
 'use client';
 
-import { Menu, Search } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { SearchDialog } from '@/components/site/search-dialog';
 import { ThemeToggle } from '@/components/site/theme-toggle';
 import { Button } from '@/components/ui/button';
 import {
@@ -100,15 +101,7 @@ export function SiteNav() {
   return (
     <div className="flex items-center gap-2">
       <DesktopNav />
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label="Tìm kiếm (sắp có)"
-        disabled
-        title="Tìm kiếm — sẽ làm ở Phase 3"
-      >
-        <Search className="size-4" />
-      </Button>
+      <SearchDialog />
       <ThemeToggle />
       <MobileNav />
     </div>

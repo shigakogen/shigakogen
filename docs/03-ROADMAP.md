@@ -188,9 +188,9 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 ## Phase 4 — Hoàn thiện
 
 ### T4.0 — Search UI (bổ sung ngoài roadmap gốc)
-- [ ] Trang/modal search dùng Edge Function `search` (đã xong ở Phase 1, chưa có UI tiêu thụ)
-- [ ] Bật lại nút search trong header (`src/components/site/site-nav.tsx`, hiện đang `disabled`)
-- **Ghi chú:** Phát hiện lúc review 2026-08-21 — roadmap gốc không có task nào giao việc xây UI này dù Edge Function đã có từ Phase 1.
+- [x] Modal search (`src/components/site/search-dialog.tsx`) dùng Edge Function `search` (Phase 1), debounce 300ms
+- [x] Bật lại nút search trong header (`site-nav.tsx`)
+- **Ghi chú:** Phát hiện lúc review 2026-08-21 — roadmap gốc không có task nào giao việc xây UI này dù Edge Function đã có từ Phase 1. Đã verify: gọi thật `search?q=hello` ra đúng kết quả, nút render đúng trong DOM. **Chưa click-test gõ tìm kiếm thật trong dialog** (không có browser) — bạn tự thử.
 
 ### T4.1 — CI/CD
 - [ ] GitHub Actions: `lint` → `typecheck` → `build` → `deno test`

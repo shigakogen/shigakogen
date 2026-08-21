@@ -1,0 +1,418 @@
+{
+  "info": {
+    "name": "shigakogen — Edge Functions",
+    "description": "Test tay 5 Supabase Edge Functions theo hợp đồng docs/02-API.md. Deploy trên project geqlgmtoigxrbyryprey, verify_jwt=false (dùng apikey header, không cần Authorization/user JWT).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://geqlgmtoigxrbyryprey.supabase.co/functions/v1"
+    },
+    {
+      "key": "apikey",
+      "value": "sb_publishable_QC14WQRrlAYeZWATxVZgIg_lKpRDV9s",
+      "description": "Publishable key — an toàn để dùng public, không phải secret."
+    },
+    {
+      "key": "test_slug",
+      "value": "hello-world"
+    }
+  ],
+  "item": [
+    {
+      "name": "increment-view",
+      "item": [
+        {
+          "name": "happy path (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" },
+              { "key": "x-forwarded-for", "value": "203.0.113.9" }
+            ],
+            "url": "{{base_url}}/increment-view",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"{{test_slug}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('có views number', () => pm.expect(pm.response.json().views).to.be.a('number'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "gọi lại cùng fingerprint — không tăng lần 2 (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" },
+              { "key": "x-forwarded-for", "value": "203.0.113.9" }
+            ],
+            "url": "{{base_url}}/increment-view",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"{{test_slug}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "console.log('So sánh views với request trước — phải bằng nhau (cùng x-forwarded-for)');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "thiếu slug (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/increment-view",
+            "body": { "mode": "raw", "raw": "{}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 400', () => pm.response.to.have.status(400));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "slug không tồn tại (404)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/increment-view",
+            "body": { "mode": "raw", "raw": "{\n  \"slug\": \"khong-ton-tai-xyz\"\n}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 404', () => pm.response.to.have.status(404));"]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "react",
+      "item": [
+        {
+          "name": "toggle like — lần 1: thêm (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" },
+              { "key": "x-forwarded-for", "value": "198.51.100.5" }
+            ],
+            "url": "{{base_url}}/react",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"{{test_slug}}\",\n  \"type\": \"like\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('counts.like tăng', () => pm.expect(pm.response.json().counts.like).to.be.above(0));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "toggle like — lần 2: bỏ (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" },
+              { "key": "x-forwarded-for", "value": "198.51.100.5" }
+            ],
+            "url": "{{base_url}}/react",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"{{test_slug}}\",\n  \"type\": \"like\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('counts.like biến mất (toggle về ban đầu)', () => pm.expect(pm.response.json().counts.like).to.be.undefined);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "type không hợp lệ (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/react",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"{{test_slug}}\",\n  \"type\": \"love\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 400', () => pm.response.to.have.status(400));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "slug không tồn tại (404)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/react",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"slug\": \"khong-ton-tai-xyz\",\n  \"type\": \"like\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 404', () => pm.response.to.have.status(404));"]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "search",
+      "item": [
+        {
+          "name": "q=hello — có kết quả (200)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "apikey", "value": "{{apikey}}" }],
+            "url": {
+              "raw": "{{base_url}}/search?q=hello&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["search"],
+              "query": [
+                { "key": "q", "value": "hello" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('results có hello-world', () => pm.expect(pm.response.json().results.some(r => r.slug === 'hello-world')).to.be.true);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "q quá ngắn — results rỗng, không lỗi (200)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "apikey", "value": "{{apikey}}" }],
+            "url": {
+              "raw": "{{base_url}}/search?q=a",
+              "host": ["{{base_url}}"],
+              "path": ["search"],
+              "query": [{ "key": "q", "value": "a" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('results rỗng', () => pm.expect(pm.response.json().results).to.have.lengthOf(0));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "subscribe",
+      "item": [
+        {
+          "name": "happy path (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/subscribe",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ban-tu-doi-email-nay@example.com\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('ok true', () => pm.expect(pm.response.json().ok).to.be.true);",
+                  "console.log('Lưu ý: nếu chưa set RESEND_API_KEY thì record vẫn được ghi vào DB nhưng KHÔNG có email nào được gửi thật. Lấy confirm_token qua Supabase Studio/MCP để test tiếp request confirm bên dưới.');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "email sai định dạng (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/subscribe",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"not-an-email\"\n}" }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 400', () => pm.response.to.have.status(400));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "honeypot bị điền — vẫn ok:true, không lưu (200)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "apikey", "value": "{{apikey}}" },
+              { "key": "content-type", "value": "application/json" }
+            ],
+            "url": "{{base_url}}/subscribe",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"bot@example.com\",\n  \"hp\": \"bot-thuong-tu-dien-vao-day\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('ok true (không lộ cơ chế chặn bot)', () => pm.expect(pm.response.json().ok).to.be.true);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "confirm",
+      "item": [
+        {
+          "name": "happy path — dán confirm_token thật vào query (302)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "apikey", "value": "{{apikey}}" }],
+            "url": {
+              "raw": "{{base_url}}/confirm?token=DAN_CONFIRM_TOKEN_THAT_VAO_DAY",
+              "host": ["{{base_url}}"],
+              "path": ["confirm"],
+              "query": [{ "key": "token", "value": "DAN_CONFIRM_TOKEN_THAT_VAO_DAY" }]
+            },
+            "description": "Lấy confirm_token bằng SQL: select confirm_token from subscribers where email = '<email vừa subscribe>'. Postman mặc định tự follow redirect nên sẽ thấy trang /newsletter/confirmed (hoặc lỗi kết nối nếu localhost:3000 chưa chạy) — tắt 'Automatically follow redirects' trong Settings để xem thẳng status 302 + header Location."
+          }
+        },
+        {
+          "name": "thiếu token (400)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "apikey", "value": "{{apikey}}" }],
+            "url": "{{base_url}}/confirm"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 400', () => pm.response.to.have.status(400));"]
+              }
+            }
+          ]
+        },
+        {
+          "name": "token không hợp lệ (404)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "apikey", "value": "{{apikey}}" }],
+            "url": {
+              "raw": "{{base_url}}/confirm?token=00000000-0000-0000-0000-000000000000",
+              "host": ["{{base_url}}"],
+              "path": ["confirm"],
+              "query": [{ "key": "token", "value": "00000000-0000-0000-0000-000000000000" }]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": ["pm.test('status 404', () => pm.response.to.have.status(404));"]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

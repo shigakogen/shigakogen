@@ -1,0 +1,132 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+/* next-themes toggles a `.dark` class trên <html> — dùng custom variant thay vì
+   media query mặc định của Tailwind v4 để dark mode theo lựa chọn của user. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Nguồn sự thật duy nhất cho màu (docs/04-DESIGN.md), chỉ khai báo Ở ĐÂY.
+     Alias shadcn/ui bên dưới KHÔNG BAO GIỜ được đặt lại đúng các tên
+     --color-bg/-surface/-border/-fg/-accent/-accent-fg — custom property
+     trùng tên thì khai báo sau thắng, tự đè mất giá trị thương hiệu
+     (đã dính lỗi này với --color-accent/-border/-muted lúc đầu). */
+  --color-bg: oklch(99% 0.002 30);
+  --color-surface: oklch(97% 0.004 30);
+  --color-border: oklch(90% 0.006 30);
+  --color-fg: oklch(22% 0.012 30);
+  --color-accent: oklch(52% 0.16 30);
+  --color-accent-fg: oklch(99% 0.002 30);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --radius: 0.75rem; /* Card bo 12px theo docs/04-DESIGN.md */
+
+  /* 2 giá trị phụ, chỉ shadcn dùng (muted-foreground/destructive) — đặt tên
+     khác hẳn "muted"/"destructive" trần để không đụng namespace shadcn. */
+  --muted-text: oklch(52% 0.014 30);
+  --destructive-color: oklch(0.577 0.245 27.325);
+}
+
+.dark {
+  --color-bg: oklch(16% 0.012 30);
+  --color-surface: oklch(20% 0.014 30);
+  --color-border: oklch(28% 0.016 30);
+  --color-fg: oklch(94% 0.006 30);
+  --color-accent: oklch(72% 0.14 30);
+  /* accent sáng hơn ở dark mode nên cần chữ tối để đủ tương phản (đã verify
+     WCAG ≥ 4.5:1 cho mọi cặp fg/bg ở cả 2 theme, xem docs/04-DESIGN.md). */
+  --color-accent-fg: oklch(16% 0.012 30);
+
+  --muted-text: oklch(68% 0.012 30);
+  --destructive-color: oklch(0.704 0.191 22.216);
+}
+
+/* Alias sang tên biến chuẩn shadcn/ui, trỏ thẳng về nguồn màu duy nhất ở
+   trên — để `shadcn add <component>` dùng đúng bảng màu mà không cần sửa
+   tay từng file. "accent" của shadcn (hover/highlight) không được dùng ở
+   component nào hiện có (đã grep) nên bỏ hẳn, tránh trùng tên với
+   --color-accent (thương hiệu). */
+@theme inline {
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-fg);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-fg);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-fg);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-accent-fg);
+  --color-secondary: var(--color-surface);
+  --color-secondary-foreground: var(--color-fg);
+  --color-muted: var(--color-surface);
+  --color-muted-foreground: var(--muted-text);
+  --color-destructive: var(--destructive-color);
+  --color-input: var(--color-border);
+  --color-ring: var(--color-accent);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* rehype-pretty-code (shiki dual theme): mỗi token có sẵn 2 biến màu
+   --shiki-light/--shiki-dark qua inline style, tự chọn theo .dark class
+   (xem src/lib/mdx.tsx — theme: { light, dark }, keepBackground: false vì
+   nền code block đã lấy từ --color-surface, không dùng nền của theme shiki). */
+[data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-light);
+}
+.dark [data-rehype-pretty-code-figure] code span {
+  color: var(--shiki-dark);
+}
+
+/* Anchor link tự sinh bởi rehype-autolink-headings — chỉ hiện khi hover/focus
+   vào heading, tránh rối mắt (docs/04-DESIGN.md: ít màu, nhiều khoảng trắng). */
+.anchor-link {
+  margin-left: 0.375rem;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  opacity: 0;
+}
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+.anchor-link:focus-visible {
+  opacity: 1;
+}
+
+/* Trang /resume: Ctrl+P ra đúng 1-2 trang A4 sạch sẽ (docs/04-DESIGN.md). */
+@media print {
+  nav,
+  footer,
+  .no-print {
+    display: none;
+  }
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+  }
+  a::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+  }
+  section {
+    break-inside: avoid;
+  }
+}

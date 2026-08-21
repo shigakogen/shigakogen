@@ -1,4 +1,5 @@
 import { Mail, Rss } from 'lucide-react';
+import Link from 'next/link';
 import type { SVGProps } from 'react';
 
 import { siteConfig } from '@/lib/site-config';
@@ -33,7 +34,10 @@ export function SiteFooter() {
     <footer className="border-border border-t">
       <div className="mx-auto flex max-w-[1100px] flex-col items-center gap-4 px-6 py-8 sm:flex-row sm:justify-between">
         <p className="text-muted-foreground text-sm">
-          © {new Date().getFullYear()} {siteConfig.name}
+          © {new Date().getFullYear()} {siteConfig.name} ·{' '}
+          <Link href="/architecture" className="hover:text-foreground transition-colors">
+            Kiến trúc
+          </Link>
         </p>
         <div className="flex items-center gap-4">
           {socialLinks.map(({ label, href, Icon }) => (

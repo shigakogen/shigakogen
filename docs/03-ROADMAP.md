@@ -206,11 +206,11 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 - **Xong khi:** có ít nhất 1 bản backup DB tự động — **chưa chạy thật lần nào** (cần secret `SUPABASE_ACCESS_TOKEN` trên GitHub Actions, xem ghi chú T4.1; cron chạy hằng tuần hoặc bạn có thể tự trigger `workflow_dispatch` để test ngay).
 
 ### T4.3 — README cho nhà tuyển dụng
-- [ ] Sơ đồ kiến trúc (Mermaid) trong README
-- [ ] Hướng dẫn chạy local trong 1 lệnh
-- [ ] Badge CI
-- [ ] Trang public `/architecture` giải thích chính site này được build thế nào
-- **Xong khi:** người lạ clone repo, chạy được trong dưới 5 phút
+- [x] Sơ đồ kiến trúc (Mermaid) trong `README.md` (GitHub tự render, không cần thêm dependency)
+- [x] Hướng dẫn chạy local — `git clone` → `cp .env.example .env.local` (điền key Supabase) → `pnpm install && pnpm dev`. Không thể gọn thành đúng 1 lệnh thật sự vì cần Supabase key trước (secret, không thể tự động điền) — đã ghi rõ trong README, coi đây là mức tối giản hợp lý.
+- [x] Badge CI (`ci.yml`, trỏ branch `main`) ở đầu README
+- [x] Trang public `/architecture` (`src/app/(site)/architecture/page.tsx`) — sơ đồ HTML/CSS thuần (không dùng lib mermaid trên client để tránh thêm dependency), bảng stack, 4 luồng dữ liệu chính (đọc bài viết, view counter, đăng bài, tìm kiếm). Link tới trang này đặt ở footer ("Kiến trúc") và trong `sitemap.ts`. Đã verify build ra `○ /architecture` (static).
+- **Xong khi:** người lạ clone repo, chạy được trong dưới 5 phút — **giả định đã có sẵn key Supabase** (cloud project của họ hoặc `supabase start` local); chưa test thật với người ngoài.
 
 ---
 

@@ -1,0 +1,16 @@
+import Script from 'next/script';
+
+// Umami: chỉ render khi có website ID (chưa cấu hình -> không render gì,
+// không ảnh hưởng build/dev). Mặc định trỏ Umami Cloud, đổi qua
+// NEXT_PUBLIC_UMAMI_SRC nếu self-host.
+export function Analytics() {
+  const websiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+
+  if (!websiteId) {
+    return null;
+  }
+
+  const src = process.env.NEXT_PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
+
+  return <Script src={src} data-website-id={websiteId} strategy="afterInteractive" />;
+}

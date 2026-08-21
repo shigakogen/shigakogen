@@ -184,6 +184,7 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 - [ ] Kiểm tra Supabase Auth → URL Configuration có đúng redirect URL production không (nếu bấm magic link lỗi thì xem ở đây)
 - [ ] Viết ≥3 bài blog thật + ≥3 project thật qua `/admin` (điều kiện "xong" của T2.8)
 - [ ] Tự mở `https://shigakogen.site` bằng trình duyệt thật để xác nhận domain chạy đúng (không verify được từ môi trường dev này — bị Fortinet firewall chặn domain lạ)
+- [ ] `pnpm-workspace.yaml` có `sharp: false` và `unrs-resolver: false` trong `allowBuilds` (build script của 2 package này đang bị chặn, có sẵn từ trước phiên này) — nếu về sau dùng tính năng cần native binary của `sharp` (vd. tối ưu ảnh build-time) thì cần đổi thành `true` và chạy lại `pnpm approve-builds`, hiện tại không ảnh hưởng vì chưa dùng tới
 
 ## Phase 4 — Hoàn thiện
 
@@ -199,10 +200,10 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 - **Chưa chạy thật được** — cần bạn vào GitHub repo → Settings → Secrets and variables → Actions, thêm 4 secret: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` (cho `ci.yml`), `SUPABASE_ACCESS_TOKEN` (personal access token, cho `deploy-functions.yml`). Không có 4 secret này thì CI sẽ đỏ ngay lần push đầu.
 
 ### T4.2 — Quan sát & sao lưu
-- [ ] Sentry (chỉ production)
-- [ ] Umami hoặc Plausible
-- [ ] Cron job GitHub Actions: `supabase db dump --data-only` → commit vào repo backup riêng, chạy hằng tuần
-- **Xong khi:** có ít nhất 1 bản backup DB tự động
+- [x] Sentry (chỉ production) — `@sentry/nextjs`, `src/instrumentation-client.ts` + `sentry.server.config.ts` + `sentry.edge.config.ts` + `src/instrumentation.ts` (hook `register()`/`onRequestError`), `next.config.ts` wrap bằng `withSentryConfig`. DSN đọc từ `NEXT_PUBLIC_SENTRY_DSN`, chỉ bật khi `NODE_ENV=production` và có DSN thật — chưa cấu hình thì tự no-op, không throw, không fail build (đã verify `pnpm typecheck && pnpm lint && pnpm build` pass). **Chưa có DSN thật** — bạn cần tạo project trên sentry.io rồi set `NEXT_PUBLIC_SENTRY_DSN` (Vercel) + tuỳ chọn `SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN` nếu muốn upload sourcemap lúc build.
+- [x] Umami — `src/components/site/analytics.tsx` (component `<Analytics />`, dùng `next/script`), gắn vào `src/app/layout.tsx`. Chỉ render script khi có `NEXT_PUBLIC_UMAMI_WEBSITE_ID`; mặc định trỏ Umami Cloud, đổi bằng `NEXT_PUBLIC_UMAMI_SRC` nếu self-host. CSP (`next.config.ts`) đã tự thêm domain Umami/Sentry vào `script-src`/`connect-src` khi các env var trên được set. **Chưa có website ID thật** — bạn cần tạo site trên Umami rồi set `NEXT_PUBLIC_UMAMI_WEBSITE_ID` (Vercel).
+- [x] Cron job GitHub Actions: `supabase db dump --data-only` → commit vào `backups/` trong repo chính (`.github/workflows/db-backup.yml`, Chủ nhật 3h UTC + `workflow_dispatch`), kèm `backups/README.md` giải thích + cảnh báo repo phải private. **Lựa chọn theo yêu cầu của bạn** (backup trong repo chính thay vì repo riêng).
+- **Xong khi:** có ít nhất 1 bản backup DB tự động — **chưa chạy thật lần nào** (cần secret `SUPABASE_ACCESS_TOKEN` trên GitHub Actions, xem ghi chú T4.1; cron chạy hằng tuần hoặc bạn có thể tự trigger `workflow_dispatch` để test ngay).
 
 ### T4.3 — README cho nhà tuyển dụng
 - [ ] Sơ đồ kiến trúc (Mermaid) trong README

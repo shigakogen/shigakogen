@@ -36,7 +36,7 @@
 
 ### T0.4 — Deploy sớm
 - [x] Push lên GitHub, connect Vercel, set env vars trên Vercel
-- **Xong khi:** URL Vercel mở được trang chủ ✅ — `https://shigakogen.vercel.app` chạy thật, `/blog` load đúng dữ liệu từ Supabase Cloud. Domain riêng `https://shigakogen.site` đã trỏ đúng (DNS + SSL do Vercel tự cấp), deployment production READY — verify qua Vercel MCP (không verify bằng curl trực tiếp được vì mạng sandbox này có tầng Fortinet SSL-inspection chặn domain lạ, không phải lỗi site).
+- **Xong khi:** URL Vercel mở được trang chủ ✅ — `https://shigakogen.vercel.app` chạy thật, `/blog` load đúng dữ liệu từ Supabase Cloud. Domain riêng `https://shigakogen.site` đã set làm Production trên Vercel, DNS đúng, deployment READY — verify qua Vercel API/MCP (`domains` có cả apex + www, deployment target=production READY). **Không verify được bằng curl trực tiếp** — mạng sandbox này có firewall Fortinet chặn hẳn domain lạ chưa phân loại (trả về trang chặn của Fortinet, không phải lỗi site) — **bạn cần tự mở trình duyệt xác nhận**.
 
 ---
 

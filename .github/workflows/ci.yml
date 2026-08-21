@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main, uat]
+  pull_request:
+    branches: [main, uat]
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+      NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+
+      - run: pnpm typecheck
+
+      # next build gọi Supabase Cloud thật lúc generateStaticParams cho
+      # /blog/[slug] và /projects/[slug] — cần NEXT_PUBLIC_SUPABASE_* thật,
+      # không mock được.
+      - run: pnpm build
+
+  edge-functions:
+    runs-on: ubuntu-latest
+    env:
+      FUNCTIONS_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}/functions/v1
+      SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      # Test tích hợp thật trên Edge Function đã deploy (không có bản local)
+      # — xem docs/02-API.md.
+      - name: Run deno tests
+        working-directory: supabase/functions
+        run: |
+          deno test --allow-net --allow-env \
+            increment-view/test.ts \
+            react/test.ts \
+            search/test.ts \
+            subscribe/test.ts \
+            confirm/test.ts

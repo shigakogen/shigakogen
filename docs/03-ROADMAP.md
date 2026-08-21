@@ -193,9 +193,10 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 - **Ghi chú:** Phát hiện lúc review 2026-08-21 — roadmap gốc không có task nào giao việc xây UI này dù Edge Function đã có từ Phase 1. Đã verify: gọi thật `search?q=hello` ra đúng kết quả, nút render đúng trong DOM. **Chưa click-test gõ tìm kiếm thật trong dialog** (không có browser) — bạn tự thử.
 
 ### T4.1 — CI/CD
-- [ ] GitHub Actions: `lint` → `typecheck` → `build` → `deno test`
-- [ ] Workflow riêng deploy Edge Functions khi `supabase/functions/**` đổi
-- [ ] Dependabot
+- [x] GitHub Actions: `lint` → `typecheck` → `build` → `deno test` (`.github/workflows/ci.yml`)
+- [x] Workflow riêng deploy Edge Functions khi `supabase/functions/**` đổi (`.github/workflows/deploy-functions.yml`, dùng `--use-api` để tránh cần Docker trong CI)
+- [x] Dependabot (`.github/dependabot.yml`, ecosystem `npm` đọc được `pnpm-lock.yaml`)
+- **Chưa chạy thật được** — cần bạn vào GitHub repo → Settings → Secrets and variables → Actions, thêm 4 secret: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` (cho `ci.yml`), `SUPABASE_ACCESS_TOKEN` (personal access token, cho `deploy-functions.yml`). Không có 4 secret này thì CI sẽ đỏ ngay lần push đầu.
 
 ### T4.2 — Quan sát & sao lưu
 - [ ] Sentry (chỉ production)

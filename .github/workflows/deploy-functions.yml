@@ -1,0 +1,23 @@
+name: Deploy Edge Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # --use-api: bundle server-side, không cần Docker (giống lúc deploy tay
+      # ở T1.x — Docker trong CI cũng có thể gặp vấn đề mạng tương tự).
+      - run: supabase functions deploy --use-api --project-ref geqlgmtoigxrbyryprey

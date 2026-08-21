@@ -35,8 +35,8 @@
 - **Xong khi:** một Server Component fetch được danh sách posts từ project cloud
 
 ### T0.4 — Deploy sớm
-- [ ] Push lên GitHub, connect Vercel, set env vars trên Vercel
-- **Xong khi:** URL Vercel mở được trang chủ
+- [x] Push lên GitHub, connect Vercel, set env vars trên Vercel
+- **Xong khi:** URL Vercel mở được trang chủ ✅ — `https://shigakogen.vercel.app` chạy thật, `/blog` load đúng dữ liệu từ Supabase Cloud. Domain riêng `shigakogen.site` đang add (xem ghi chú cuối T2.8).
 
 ---
 
@@ -146,30 +146,32 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 ## Phase 3 — Admin
 
 ### T3.1 — Auth
-- [ ] `/admin/login` — magic link qua Supabase Auth
-- [ ] `src/app/auth/callback/route.ts` — exchange code lấy session
-- [ ] `middleware.ts` — refresh session, chặn `/admin/*` nếu chưa login hoặc email không có trong `admins`
-- **Xong khi:** mở `/admin` khi chưa login bị đá về `/admin/login`; email lạ bị từ chối
+- [x] `/admin/login` — magic link qua Supabase Auth
+- [x] `src/app/auth/callback/route.ts` — exchange code lấy session
+- [x] `src/proxy.ts` — refresh session, chặn `/admin/*` nếu chưa login hoặc email không có trong `admins` (Next.js 16 đổi quy ước file từ `middleware.ts` sang `proxy.ts`, export `proxy` thay vì `middleware` — đã tự chạy codemod chính thức)
+- **Xong khi:** mở `/admin` khi chưa login bị đá về `/admin/login` ✅ verify thật (curl: 307 → `/admin/login`); email lạ bị từ chối — **logic đã đúng** (RPC `is_admin()` chặn ở proxy.ts, đã test đúng ở T0.2) nhưng **chưa test round-trip thật với 1 email lạ** (chỉ có 1 email admin duy nhất để test). Đã gửi thật 1 magic link tới `luuhoainam97@gmail.com` qua `signInWithOtp` — không lỗi, nghĩa là redirect URL đã được Supabase chấp nhận. **Cần bạn tự bấm link trong email để xác nhận trọn vẹn flow đăng nhập** (không click được email trong môi trường này).
+- Trang `/admin` hiện chỉ là stub (chứng minh middleware + hiện email đã login) — bảng danh sách bài + editor thật sẽ xây ở T3.2.
 
 ### T3.2 — Post editor
-- [ ] `/admin` — bảng danh sách bài, lọc theo status
-- [ ] `/admin/posts/new` và `/admin/posts/[id]`
-- [ ] Editor 2 cột: textarea Markdown ↔ live preview
-- [ ] Tự sinh slug từ title, tự tính `reading_minutes`
-- [ ] Server Action: save draft / publish (set `published_at`) / unpublish / delete có confirm
-- [ ] Sau khi lưu: `revalidatePath('/blog')` và `revalidatePath('/blog/'+slug)`
-- [ ] Autosave draft mỗi 10s vào localStorage để không mất bài
-- **Xong khi:** viết bài mới trên `/admin` → publish → thấy ngay trên `/blog`
+- [x] `/admin` — bảng danh sách bài, lọc theo status (query param `?status=`)
+- [x] `/admin/posts/new` và `/admin/posts/[id]`
+- [x] Editor 2 cột: textarea Markdown ↔ live preview (debounce 500ms, render qua đúng `renderMdx()` — Server Action trả thẳng React element, không dùng `react-dom/server` vì Next 16 chặn import đó trong Server Action/Component)
+- [x] Tự sinh slug từ title (tính trực tiếp lúc render, không dùng `useEffect` — tránh lỗi lint `set-state-in-effect`), tự tính `reading_minutes`
+- [x] Server Action: save draft / publish (set `published_at`) / unpublish / delete có confirm (`window.confirm`)
+- [x] Sau khi lưu: `revalidatePath('/blog')`, `/blog/[slug]` (cả slug cũ nếu đổi), `/`, `/sitemap.xml`, `/rss.xml`
+- [x] Autosave draft mỗi 10s vào localStorage, hỏi khôi phục khi mở lại editor
+- **Xong khi:** viết bài mới trên `/admin` → publish → thấy ngay trên `/blog` — **chưa click-test được UI thật** (không có browser tool). Đã verify: `slugify()` ra đúng slug hợp lệ với tiêu đề tiếng Việt có dấu, RLS policy `posts_admin_write` (yêu cầu `is_admin()`) đúng như thiết kế, `typecheck`/`lint`/`build` sạch. **Cần bạn tự đăng nhập (bấm magic link đã gửi ở T3.1) rồi thử viết + publish 1 bài thật** để xác nhận trọn vẹn flow.
 
 ### T3.3 — Upload ảnh
-- [ ] Upload lên bucket `post-images`, trả về URL public
-- [ ] Paste ảnh trực tiếp vào editor tự upload và chèn markdown
-- [ ] Giới hạn 5MB, chỉ nhận image/*
-- **Xong khi:** paste screenshot vào editor là ảnh hiện trong preview
+- [x] Upload lên bucket `post-images`, trả về URL public (Server Action `uploadPostImage`, dùng session client — RLS `post-images admin write` tự chặn nếu không phải admin, không cần service role)
+- [x] Paste ảnh trực tiếp vào editor tự upload và chèn markdown (`onPaste` trên textarea, chèn placeholder rồi thay bằng `![](url)` khi upload xong)
+- [x] Giới hạn 5MB, chỉ nhận image/* (check ở Server Action)
+- **Xong khi:** paste screenshot vào editor là ảnh hiện trong preview — **chưa test được bằng paste thật** (cần browser + session admin thật). Logic đã review kỹ, dùng đúng RLS bucket đã tạo/verify ở T2.6. **Cần bạn tự thử paste 1 ảnh vào editor** sau khi đăng nhập để xác nhận.
 
 ### T3.4 — Quản lý projects
-- [ ] CRUD project, kéo thả sắp xếp `sort_order`, toggle `featured`
-- **Xong khi:** đổi thứ tự trên admin thì trang `/projects` đổi theo
+- [x] CRUD project (`/admin/projects`, `/admin/projects/new`, `/admin/projects/[id]`), kéo thả sắp xếp `sort_order` (HTML5 Drag and Drop thuần — không thêm dnd-kit/react-dnd, danh sách project cá nhân ngắn không cần), toggle `featured`
+- **Xong khi:** đổi thứ tự trên admin thì trang `/projects` đổi theo — logic đúng (`reorderProjects` ghi `sort_order` mới + `revalidatePath('/projects')`), RLS `projects_admin_all` verify đúng qua MCP. **Chưa click-test kéo-thả thật bằng browser** — cần bạn tự thử sau khi đăng nhập.
+- Phase 3 (Admin) hoàn tất — bạn giờ có thể tự đăng nhập và viết bài/project thật qua UI, không cần tôi bịa nội dung giả cho T2.8 nữa.
 
 ---
 

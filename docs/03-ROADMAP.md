@@ -175,7 +175,22 @@ Viết & deploy thẳng lên Supabase Cloud (`supabase functions deploy`), set s
 
 ---
 
+## Cần bạn xử lý sau (đã ghi nhận 2026-08-21, tạm gác lại)
+
+- [ ] Set `SUPABASE_SERVICE_ROLE_KEY` trên Vercel Environment Variables (hiện code app chưa dùng key này ở đâu — không urgent, nhưng nên set sẵn)
+- [ ] `supabase secrets set RESEND_API_KEY=<key>` — chưa set, `subscribe` chưa gửi được email xác nhận thật
+- [ ] Upload `resume.pdf` thật vào bucket Storage `files` — nút "Tải PDF" ở `/resume` đang trỏ đúng chỗ nhưng chưa có file
+- [ ] Sửa toàn bộ placeholder trong `src/lib/profile-config.ts` (tên, tagline, bio, timeline, CV) và `src/lib/site-config.ts` (social links)
+- [ ] Kiểm tra Supabase Auth → URL Configuration có đúng redirect URL production không (nếu bấm magic link lỗi thì xem ở đây)
+- [ ] Viết ≥3 bài blog thật + ≥3 project thật qua `/admin` (điều kiện "xong" của T2.8)
+- [ ] Tự mở `https://shigakogen.site` bằng trình duyệt thật để xác nhận domain chạy đúng (không verify được từ môi trường dev này — bị Fortinet firewall chặn domain lạ)
+
 ## Phase 4 — Hoàn thiện
+
+### T4.0 — Search UI (bổ sung ngoài roadmap gốc)
+- [ ] Trang/modal search dùng Edge Function `search` (đã xong ở Phase 1, chưa có UI tiêu thụ)
+- [ ] Bật lại nút search trong header (`src/components/site/site-nav.tsx`, hiện đang `disabled`)
+- **Ghi chú:** Phát hiện lúc review 2026-08-21 — roadmap gốc không có task nào giao việc xây UI này dù Edge Function đã có từ Phase 1.
 
 ### T4.1 — CI/CD
 - [ ] GitHub Actions: `lint` → `typecheck` → `build` → `deno test`

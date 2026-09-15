@@ -19,7 +19,9 @@ export default async function AdminProjectsPage() {
             ← Bài viết
           </Link>
         </div>
-        <Button render={<Link href="/admin/projects/new" />}>Project mới</Button>
+        <Button nativeButton={false} render={<Link href="/admin/projects/new" />}>
+          Project mới
+        </Button>
       </div>
 
       <p className="text-muted-foreground mt-4 text-xs">

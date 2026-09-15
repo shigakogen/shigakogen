@@ -40,7 +40,9 @@ export default async function AdminPage({
           </Link>
         </div>
         <div className="flex gap-2">
-          <Button render={<Link href="/admin/posts/new" />}>Bài mới</Button>
+          <Button nativeButton={false} render={<Link href="/admin/posts/new" />}>
+            Bài mới
+          </Button>
           <form action={signOut}>
             <Button type="submit" variant="outline">
               Đăng xuất

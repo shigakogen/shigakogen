@@ -50,10 +50,14 @@ export default async function HomePage() {
           {profileConfig.hero.tagline}
         </p>
         <div className="mt-8 flex gap-3">
-          <Button render={<Link href={profileConfig.hero.ctaHref} />}>
+          <Button nativeButton={false} render={<Link href={profileConfig.hero.ctaHref} />}>
             {profileConfig.hero.ctaLabel}
           </Button>
-          <Button variant="outline" render={<Link href={siteConfig.social.email} />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<Link href={siteConfig.social.email} />}
+          >
             Liên hệ
           </Button>
         </div>
@@ -128,8 +132,10 @@ export default async function HomePage() {
         <h2 className="text-xl font-[650] tracking-[-0.02em]">Muốn trao đổi công việc?</h2>
         <p className="text-muted-foreground mt-2">Liên hệ trực tiếp hoặc xem CV đầy đủ.</p>
         <div className="mt-6 flex justify-center gap-3">
-          <Button render={<Link href={siteConfig.social.email} />}>Liên hệ</Button>
-          <Button variant="outline" render={<Link href="/resume" />}>
+          <Button nativeButton={false} render={<Link href={siteConfig.social.email} />}>
+            Liên hệ
+          </Button>
+          <Button variant="outline" nativeButton={false} render={<Link href="/resume" />}>
             Xem CV
           </Button>
         </div>

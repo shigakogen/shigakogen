@@ -24,7 +24,11 @@ export default function ResumePage() {
         <p className="text-muted-foreground text-sm font-medium tracking-wide uppercase">Resume</p>
         <div className="flex gap-2">
           <PrintButton />
-          <Button variant="outline" render={<a href={resumePdfUrl} download />}>
+          <Button
+            variant="outline"
+            nativeButton={false}
+            render={<a href={resumePdfUrl} download />}
+          >
             <Download className="size-4" /> Tải PDF
           </Button>
         </div>

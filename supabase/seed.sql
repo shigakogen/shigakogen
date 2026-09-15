@@ -1,7 +1,7 @@
 -- Seed cho môi trường local (chạy tự động khi `supabase db reset`)
 -- ⚠️ Đổi email dưới đây thành email bạn dùng để đăng nhập admin.
 
-insert into public.admins (email) values ('luuhoainam97@gmail.com')
+insert into public.admins (email) values ('nam.luuhoai.dev@gmail.com')
 on conflict do nothing;
 
 insert into public.posts (slug, title, summary, content, tags, status, reading_minutes, published_at)

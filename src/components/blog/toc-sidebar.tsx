@@ -14,7 +14,7 @@ export function TocSidebar({ items }: { items: TocItem[] }) {
           <li key={item.id} className={item.level === 3 ? 'pl-4' : ''}>
             <a
               href={`#${item.id}`}
-              className="text-muted-foreground hover:text-foreground focus-visible:outline-accent block rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong block rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               {item.text}
             </a>

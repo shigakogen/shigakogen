@@ -29,7 +29,7 @@ function heading(level: 2 | 3 | 4) {
 function MdxLink({ href = '', children, ...props }: ComponentPropsWithoutRef<'a'>) {
   const isInternal = href.startsWith('/') || href.startsWith('#');
   const linkClassName =
-    'text-accent underline underline-offset-3 hover:decoration-2 rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+    'text-accent-strong underline underline-offset-3 hover:decoration-2 rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong';
 
   if (isInternal) {
     return (

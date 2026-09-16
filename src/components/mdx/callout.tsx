@@ -14,7 +14,7 @@ export function Callout({ type = 'info', children }: { type?: CalloutType; child
 
   return (
     <div className="bg-surface border-border my-6 flex gap-3 rounded-lg border p-4">
-      <Icon className="text-accent mt-0.5 size-4 shrink-0" aria-hidden="true" />
+      <Icon className="text-accent-strong mt-0.5 size-4 shrink-0" aria-hidden="true" />
       <div className="text-sm leading-relaxed [&>p]:m-0">{children}</div>
     </div>
   );

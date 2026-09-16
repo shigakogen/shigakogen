@@ -10,6 +10,7 @@ import { extractToc, renderMdx } from '@/lib/mdx';
 import { getAdjacentPosts, getPostBySlug, getPostReactionCounts } from '@/lib/queries/posts';
 import { createStaticClient } from '@/lib/supabase/static';
 import { absoluteUrl, blogPostingJsonLd, breadcrumbJsonLd, pageMetadata } from '@/lib/seo';
+import { formatDate } from '@/lib/utils';
 
 export const revalidate = 3600;
 
@@ -35,15 +36,6 @@ export async function generateMetadata({
     image: `/api/og?title=${encodeURIComponent(post.title)}`,
     type: 'article',
     publishedTime: post.published_at ?? undefined,
-  });
-}
-
-function formatDate(iso: string | null) {
-  if (!iso) return '';
-  return new Date(iso).toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
   });
 }
 
@@ -84,7 +76,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <article className="min-w-0">
         <Link
           href="/blog"
-          className="text-muted-foreground hover:text-foreground focus-visible:outline-accent rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           ← Tất cả bài viết
         </Link>
@@ -94,7 +86,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="text-muted-foreground mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
           <time dateTime={post.published_at ?? undefined}>{formatDate(post.published_at)}</time>
           <span aria-hidden="true">·</span>
-          <span>{post.reading_minutes} phút đọc</span>
+          <span>{post.reading_minutes} min read</span>
           <span aria-hidden="true">·</span>
           <ViewCounter slug={post.slug} initialViews={post.view_count} />
         </div>
@@ -105,7 +97,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <Link
                 key={tag}
                 href={`/blog/tags/${tag}`}
-                className="bg-surface hover:text-accent rounded-full px-2.5 py-0.5 text-xs"
+                className="bg-surface hover:text-accent-strong rounded-full px-2.5 py-0.5 text-xs"
               >
                 #{tag}
               </Link>
@@ -127,10 +119,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {prev ? (
             <Link
               href={`/blog/${prev.slug}`}
-              className="focus-visible:outline-accent rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="focus-visible:outline-accent-strong rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <p className="text-muted-foreground text-xs">← Bài trước</p>
-              <p className="hover:text-accent mt-1 font-medium">{prev.title}</p>
+              <p className="hover:text-accent-strong mt-1 font-medium">{prev.title}</p>
             </Link>
           ) : (
             <span />
@@ -138,10 +130,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {next ? (
             <Link
               href={`/blog/${next.slug}`}
-              className="focus-visible:outline-accent rounded-sm text-right outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="focus-visible:outline-accent-strong rounded-sm text-right outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <p className="text-muted-foreground text-xs">Bài sau →</p>
-              <p className="hover:text-accent mt-1 font-medium">{next.title}</p>
+              <p className="hover:text-accent-strong mt-1 font-medium">{next.title}</p>
             </Link>
           ) : (
             <span />

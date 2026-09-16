@@ -24,7 +24,7 @@ export default function AboutPage() {
       <ol className="border-border mt-6 space-y-8 border-l pl-6">
         {profileConfig.about.timeline.map((item) => (
           <li key={`${item.year}-${item.title}`} className="relative">
-            <span className="bg-accent absolute top-1.5 -left-[1.6rem] size-2.5 rounded-full" />
+            <span className="bg-accent-strong absolute top-1.5 -left-[1.6rem] size-2.5 rounded-full" />
             <p className="text-muted-foreground text-sm">{item.year}</p>
             <p className="mt-0.5 font-medium">{item.title}</p>
             <p className="text-muted-foreground mt-1 text-sm">{item.description}</p>

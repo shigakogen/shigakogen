@@ -72,7 +72,7 @@ export function ProjectList({ initialProjects }: { initialProjects: Tables<'proj
           className="border-border bg-background flex cursor-move items-center justify-between gap-4 rounded-lg border p-3"
         >
           <div className="min-w-0">
-            <Link href={`/admin/projects/${project.id}`} className="hover:text-accent font-medium">
+            <Link href={`/admin/projects/${project.id}`} className="hover:text-accent-strong font-medium">
               {project.title}
             </Link>
             <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs">

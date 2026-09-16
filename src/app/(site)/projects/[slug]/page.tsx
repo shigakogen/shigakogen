@@ -53,7 +53,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
       <Link
         href="/projects"
-        className="text-muted-foreground hover:text-foreground focus-visible:outline-accent rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         ← Tất cả project
       </Link>
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               href={project.repo_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground focus-visible:outline-accent inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <Code2 className="size-4" /> Code
             </a>
@@ -85,7 +85,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               href={project.live_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground focus-visible:outline-accent inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               <ExternalLink className="size-4" /> Xem live
             </a>

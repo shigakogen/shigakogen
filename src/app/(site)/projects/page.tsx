@@ -31,9 +31,9 @@ export default async function ProjectsPage() {
             <Link
               key={project.slug}
               href={`/projects/${project.slug}`}
-              className="border-border hover:border-accent focus-visible:outline-accent group rounded-lg border p-5 outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="border-border hover:border-accent-strong focus-visible:outline-accent-strong group rounded-lg border p-5 outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
-              <h2 className="group-hover:text-accent font-[650] tracking-[-0.02em] transition-colors">
+              <h2 className="group-hover:text-accent-strong font-[650] tracking-[-0.02em] transition-colors">
                 {project.title}
               </h2>
               <p className="text-muted-foreground mt-2 text-sm leading-relaxed">

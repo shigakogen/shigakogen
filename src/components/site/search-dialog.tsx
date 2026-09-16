@@ -76,7 +76,7 @@ export function SearchDialog() {
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Gõ từ khoá…"
-          className="border-border bg-background focus-visible:ring-accent w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2"
+          className="border-border bg-background focus-visible:ring-accent-strong w-full rounded-md border px-3 py-2 text-sm outline-none focus-visible:ring-2"
         />
 
         <div className="max-h-80 overflow-y-auto">

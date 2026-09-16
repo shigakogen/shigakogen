@@ -40,7 +40,7 @@ export default async function BlogIndexPage({
             <Link
               key={tag}
               href={`/blog/tags/${tag}`}
-              className="bg-surface hover:text-accent focus-visible:outline-accent rounded-full px-3 py-1 text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+              className="bg-surface hover:text-accent-strong focus-visible:outline-accent-strong rounded-full px-3 py-1 text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               #{tag}
             </Link>

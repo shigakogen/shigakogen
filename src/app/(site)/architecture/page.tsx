@@ -73,7 +73,7 @@ export default function ArchitecturePage() {
           <span className="text-muted-foreground" aria-hidden="true">
             ↓ HTTPS
           </span>
-          <div className="border-accent text-accent rounded-md border px-4 py-2 font-semibold">
+          <div className="border-accent-strong text-accent-strong rounded-md border px-4 py-2 font-semibold">
             Vercel — Next.js (SSR / ISR / Server Actions)
           </div>
           <span className="text-muted-foreground" aria-hidden="true">
@@ -144,7 +144,7 @@ export default function ArchitecturePage() {
           href="https://github.com/Kichirou58/shigakogen"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-accent underline underline-offset-4"
+          className="text-accent-strong underline underline-offset-4"
         >
           GitHub
         </a>

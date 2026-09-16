@@ -40,7 +40,7 @@ export default async function BlogTagPage({
     <div className="mx-auto w-full max-w-[680px] px-6 py-16">
       <Link
         href="/blog"
-        className="text-muted-foreground hover:text-foreground focus-visible:outline-accent rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+        className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         ← Tất cả bài viết
       </Link>

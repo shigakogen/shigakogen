@@ -5,14 +5,15 @@ export const siteConfig = {
   description: 'Portfolio và blog kỹ thuật của một Backend Developer.',
   nav: [
     { label: 'Blog', href: '/blog' },
-    { label: 'Projects', href: '/projects' },
     { label: 'Resume', href: '/resume' },
     { label: 'About', href: '/about' },
   ],
   social: {
-    github: 'https://github.com/your-username', // TODO: điền username thật
+    github: 'https://github.com/shigakogen',
     linkedin: 'https://linkedin.com/in/your-username', // TODO
-    email: 'mailto:you@example.com', // TODO
+    facebook: 'https://facebook.com/kichirou58',
+    instagram: 'https://instagram.com/shigakogenn',
+    email: 'mailto:nam.luuhoai.dev@gmail.com',
     rss: '/rss.xml',
   },
 } as const;

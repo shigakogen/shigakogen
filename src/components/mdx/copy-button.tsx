@@ -15,7 +15,7 @@ export function CopyButton({ code }: { code: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
       }}
-      className="text-muted-foreground hover:text-foreground hover:bg-surface focus-visible:outline-accent absolute top-2 right-2 rounded-md p-1.5 transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="text-muted-foreground hover:text-foreground hover:bg-surface focus-visible:outline-accent-strong absolute top-2 right-2 rounded-md p-1.5 transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
     >
       {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
     </button>

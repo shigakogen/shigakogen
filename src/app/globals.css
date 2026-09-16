@@ -15,12 +15,33 @@
   --color-bg: oklch(99% 0.002 30);
   --color-surface: oklch(97% 0.004 30);
   --color-border: oklch(90% 0.006 30);
-  --color-fg: oklch(22% 0.012 30);
-  --color-accent: oklch(52% 0.16 30);
-  --color-accent-fg: oklch(99% 0.002 30);
+  --color-fg: oklch(26.9% 0.1235 268.41); /* = #0F1B61, chỉ áp light mode — xem lưu ý ở .dark */
+
+  /* accent = pastel #B3EBF2 dùng cho NỀN các khối fill (nút primary, badge,
+     logo) — luôn đi kèm accent-fg (chữ/icon tối) đặt lên trên để đủ contrast.
+     Không dùng accent làm màu chữ/link/viền/focus-ring trên nền trang vì quá
+     sáng (contrast chỉ ~1.3:1 với --color-bg) — dùng accent-strong cho vai
+     trò đó. Giống nhau ở cả 2 theme vì đây là màu "chip" cố định, không phụ
+     thuộc độ sáng nền. */
+  --color-accent: oklch(90.4% 0.0576 206);
+  --color-accent-fg: oklch(25% 0.03 206);
+
+  /* accent-strong = bản đậm hơn cùng hue 206, dùng cho link/hover-text/viền/
+     focus-ring — nơi màu phải đọc được trực tiếp trên nền trang. Công thức
+     L/C giữ nguyên như accent cũ (hue 30) để tái dùng mức contrast đã verify,
+     chỉ đổi hue. */
+  --color-accent-strong: oklch(52% 0.16 206);
+
+  /* Viền tím kiểu line-art (tham khảo robbowen.digital) — chỉ dùng để viền
+     quanh các khối nền pastel (accent), không dùng làm màu chữ/link. Giữ
+     nguyên ở cả 2 theme vì cũng là màu "chip" cố định. */
+  --color-accent-border: oklch(54% 0.2466 293);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  /* Chỉ dùng cho heading hero trang chủ (tham khảo robbowen.digital, font
+     Bitter) — phần còn lại của site vẫn dùng --font-sans. */
+  --font-serif: var(--font-bitter), ui-serif, Georgia, serif;
 
   --radius: 0.75rem; /* Card bo 12px theo docs/04-DESIGN.md */
 
@@ -34,11 +55,13 @@
   --color-bg: oklch(16% 0.012 30);
   --color-surface: oklch(20% 0.014 30);
   --color-border: oklch(28% 0.016 30);
+  /* fg giữ màu sáng ở dark mode, KHÔNG dùng #0F1B61 (navy của light mode) —
+     navy đó chỉ đạt contrast 1.25:1 trên nền tối, gần như vô hình. */
   --color-fg: oklch(94% 0.006 30);
-  --color-accent: oklch(72% 0.14 30);
-  /* accent sáng hơn ở dark mode nên cần chữ tối để đủ tương phản (đã verify
-     WCAG ≥ 4.5:1 cho mọi cặp fg/bg ở cả 2 theme, xem docs/04-DESIGN.md). */
-  --color-accent-fg: oklch(16% 0.012 30);
+  /* accent/accent-fg KHÔNG override ở dark mode — cùng là màu chip cố định
+     (pastel bg + chữ tối) ở cả 2 theme, xem giải thích ở khối @theme phía
+     trên. */
+  --color-accent-strong: oklch(72% 0.14 206);
 
   --muted-text: oklch(68% 0.012 30);
   --destructive-color: oklch(0.704 0.191 22.216);
@@ -64,7 +87,7 @@
   --color-muted-foreground: var(--muted-text);
   --color-destructive: var(--destructive-color);
   --color-input: var(--color-border);
-  --color-ring: var(--color-accent);
+  --color-ring: var(--color-accent-strong);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);

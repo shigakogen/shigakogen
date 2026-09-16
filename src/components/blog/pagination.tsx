@@ -21,7 +21,7 @@ export function Pagination({
       {hasPrev ? (
         <Link
           href={`${basePath}${sep}page=${page - 1}`}
-          className="text-muted-foreground hover:text-foreground focus-visible:outline-accent inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <ChevronLeft className="size-4" /> Trước
         </Link>
@@ -34,7 +34,7 @@ export function Pagination({
       {hasNext ? (
         <Link
           href={`${basePath}${sep}page=${page + 1}`}
-          className="text-muted-foreground hover:text-foreground focus-visible:outline-accent inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-muted-foreground hover:text-foreground focus-visible:outline-accent-strong inline-flex items-center gap-1 rounded-sm text-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           Sau <ChevronRight className="size-4" />
         </Link>

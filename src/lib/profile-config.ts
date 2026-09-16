@@ -3,10 +3,12 @@
 // "nội dung quan trọng hơn hiệu ứng").
 export const profileConfig = {
   hero: {
-    heading: 'Xin chào, tôi là',
-    name: 'Backend Developer', // TODO: tên thật
-    tagline: 'Xây hệ thống backend đáng tin cậy, viết về những gì học được trên đường đi.', // TODO
-    ctaLabel: 'Xem CV',
+    heading: `Hi, my name is ---`,
+    name: 'Nam Luu',
+    roles: 'Senior Backend Developer. Systems Builder. Performance Chaser.',
+    tagline:
+      'I build distributed systems, hunt down bottlenecks, and turn complex engineering problems into faster, more reliable, and easier-to-operate software.',
+    ctaLabel: 'View Resume',
     ctaHref: '/resume',
   },
   about: {

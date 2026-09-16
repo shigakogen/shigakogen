@@ -9,39 +9,45 @@ Nguyên tắc: **nội dung là chính, giao diện lùi lại phía sau.** Ít 
 
 ## Màu (OKLCH, Tailwind v4 dùng `@theme`)
 
-Đã chốt **hue 30 (cam)** — implement trong `src/app/globals.css`:
+Đã chốt **hue 206 (xanh blue pastel, dựa trên `#B3EBF2`)** — implement trong `src/app/globals.css`:
 
 ```css
 @theme {
   /* Light */
-  --color-bg:        oklch(99% 0.002 30);
-  --color-surface:   oklch(97% 0.004 30);
-  --color-border:    oklch(90% 0.006 30);
-  --color-fg:        oklch(22% 0.012 30);
-  --color-muted:     oklch(52% 0.014 30);
-  --color-accent:    oklch(52% 0.16 30);
-  --color-accent-fg: oklch(99% 0.002 30);
+  --color-bg:            oklch(99% 0.002 30);
+  --color-surface:       oklch(97% 0.004 30);
+  --color-border:        oklch(90% 0.006 30);
+  --color-fg:            oklch(22% 0.012 30);
+  --color-muted:         oklch(52% 0.014 30);
+  --color-accent:        oklch(90.4% 0.0576 206); /* = #B3EBF2, dùng làm NỀN fill */
+  --color-accent-fg:     oklch(25% 0.03 206);      /* chữ/icon tối trên accent */
+  --color-accent-strong: oklch(52% 0.16 206);      /* chữ/link/viền/focus-ring */
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 .dark {
-  --color-bg:        oklch(16% 0.012 30);
-  --color-surface:   oklch(20% 0.014 30);
-  --color-border:    oklch(28% 0.016 30);
-  --color-fg:        oklch(94% 0.006 30);
-  --color-muted:     oklch(68% 0.012 30);
-  --color-accent:    oklch(72% 0.14 30);
-  --color-accent-fg: oklch(16% 0.012 30); /* tối, không phải trắng — xem lưu ý dưới */
+  --color-bg:            oklch(16% 0.012 30);
+  --color-surface:       oklch(20% 0.014 30);
+  --color-border:        oklch(28% 0.016 30);
+  --color-fg:            oklch(94% 0.006 30);
+  --color-muted:         oklch(68% 0.012 30);
+  /* accent/accent-fg KHÔNG đổi theo theme — xem lưu ý dưới */
+  --color-accent-strong: oklch(72% 0.14 206);
 }
 ```
 
+**2 vai trò tách riêng cho accent** (quyết định khi đổi từ cam sang pastel blue — pastel quá sáng để dùng làm chữ/viền):
+- `accent` + `accent-fg`: chỉ dùng khi accent là **nền của một khối fill** có chữ/icon đặt trực tiếp lên trên (nút primary, badge, logo). Cặp này giữ nguyên giá trị ở cả 2 theme vì đây là màu "chip" thương hiệu cố định, không phải màu phái sinh theo độ sáng nền. Contrast accent-fg vs accent ≈ 12:1.
+- `accent-strong`: dùng khi accent đóng vai trò **chữ/link/hover/viền/focus-ring** — tức là màu đặt trực tiếp lên nền trang (`--color-bg`/`--color-surface`), cần đủ đậm để đọc được. Light: L52%/C0.16 (contrast ≈5:1 với bg). Dark: L72%/C0.14 (contrast ≈8:1 với bg) — công thức L/C tái dùng y hệt bản hue 30 cũ, chỉ đổi hue, vì đã verify mức lightness đó cho contrast tốt.
+
 Lưu ý so với bản nháp ban đầu (hue 250 mặc định):
 - `--font-mono` trỏ `--font-geist-mono` (đã có sẵn từ scaffold Next.js) thay vì JetBrains Mono — tránh thêm dependency font mới không cần thiết.
-- `accent` ở light mode hạ từ L58%→L52%, và `accent-fg` ở dark mode đổi từ trắng sang tối (`oklch(16% ...)`) — do đo WCAG thực tế thấy hue cam ở các mức lightness gốc cho contrast `accent` vs `accent-fg` chỉ 2.55:1–4.49:1 (fail/borderline), sau khi chỉnh đạt 5.79:1 (light) và 7.4:1 (dark). Xanh dương (hue 250) gốc có thể không gặp vấn đề này — **mỗi khi đổi hue phải đo lại**, không copy nguyên giá trị lightness cũ.
+- Hue cam (30) ban đầu: `accent-fg` ở dark mode phải đổi từ trắng sang tối để đạt 5.79:1 (light) / 7.4:1 (dark) — **mỗi khi đổi hue phải đo lại**, không copy nguyên giá trị lightness cũ.
+- Hue pastel blue (206) hiện tại: bản thân accent (L90%) quá sáng để dùng trực tiếp làm chữ/link ở bất kỳ theme nào (contrast chỉ ~1.3:1 với bg) → tách thêm `accent-strong` thay vì ép 1 token gánh 2 vai trò.
 
-**Chọn accent:** đổi giá trị hue (số cuối) nếu muốn màu khác. 250 = xanh dương, 150 = xanh lá, 30 = cam, 320 = tím.
+**Chọn accent:** đổi giá trị hue (số cuối) nếu muốn màu khác. 250 = xanh dương, 150 = xanh lá, 30 = cam, 206 = xanh blue pastel, 320 = tím. Nếu hue mới cũng rất sáng (pastel) như 206, nhớ tách `accent-strong` tương tự thay vì chỉ đổi 1 token `accent`.
 
 **Bắt buộc:** mọi cặp foreground/background phải đạt contrast ≥ 4.5:1 ở cả hai theme — đo bằng WCAG relative luminance thực tế (OKLCH lightness không tuyến tính với contrast), không chỉ nhìn số L cho giống nhau giữa 2 theme rồi coi là an toàn.
 
@@ -65,6 +71,7 @@ Lưu ý so với bản nháp ban đầu (hue 250 mặc định):
 - Easing: `cubic-bezier(0.4, 0, 0.2, 1)`.
 - **Bắt buộc** bọc trong `@media (prefers-reduced-motion: no-preference)`.
 - Không parallax, không animation kéo dài > 300ms, không auto-play.
+- **Công cụ:** CSS `transition`/`@keyframes` + `IntersectionObserver` (viewport reveal) là đủ cho toàn bộ site. Chỉ cân nhắc thêm `motion` (Framer Motion) nếu sau này cần scroll-reveal/hover phức tạp hơn mức CSS thuần làm được — không dùng GSAP (nặng, không cần thiết cho mức độ animation đã định ở trên).
 
 ## Component style
 

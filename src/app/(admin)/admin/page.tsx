@@ -7,13 +7,9 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getAllPostsForAdmin } from '@/lib/queries/admin-posts';
 import { createClient } from '@/lib/supabase/server';
+import { formatDate } from '@/lib/utils';
 
 export const metadata: Metadata = { title: 'Admin', robots: { index: false } };
-
-function formatDate(iso: string | null) {
-  if (!iso) return '—';
-  return new Date(iso).toLocaleDateString('vi-VN');
-}
 
 export default async function AdminPage({
   searchParams,
@@ -84,14 +80,14 @@ export default async function AdminPage({
               className="border-border flex items-center justify-between gap-4 rounded-lg border p-3"
             >
               <div className="min-w-0">
-                <Link href={`/admin/posts/${post.id}`} className="hover:text-accent font-medium">
+                <Link href={`/admin/posts/${post.id}`} className="hover:text-accent-strong font-medium">
                   {post.title}
                 </Link>
                 <div className="text-muted-foreground mt-1 flex items-center gap-2 text-xs">
                   <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>
                     {post.status === 'published' ? 'Đã xuất bản' : 'Nháp'}
                   </Badge>
-                  <span>{formatDate(post.published_at)}</span>
+                  <span>{formatDate(post.published_at, '—')}</span>
                   <span>·</span>
                   <span>{post.view_count} views</span>
                 </div>

@@ -210,7 +210,7 @@ export function PostEditor({ post }: { post?: Tables<'posts'> }) {
       </div>
 
       <p className="text-muted-foreground mt-3 text-xs">
-        ~{estimateReadingMinutes(content)} phút đọc (tự tính khi lưu)
+        ~{estimateReadingMinutes(content)} min read (tự tính khi lưu)
         {uploadingImage && ' · đang tải ảnh lên…'}
       </p>
 

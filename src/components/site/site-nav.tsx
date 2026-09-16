@@ -4,7 +4,7 @@ import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { SearchDialog } from '@/components/site/search-dialog';
+import { GithubIcon } from '@/components/site/social-icons';
 import { ThemeToggle } from '@/components/site/theme-toggle';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,7 +19,7 @@ import { siteConfig } from '@/lib/site-config';
 import { cn } from '@/lib/utils';
 
 const focusRing =
-  'rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent';
+  'rounded-sm outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-strong';
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -101,7 +101,15 @@ export function SiteNav() {
   return (
     <div className="flex items-center gap-2">
       <DesktopNav />
-      <SearchDialog />
+      <Button
+        variant="ghost"
+        size="icon"
+        nativeButton={false}
+        aria-label="GitHub"
+        render={<a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer" />}
+      >
+        <GithubIcon className="size-4" />
+      </Button>
       <ThemeToggle />
       <MobileNav />
     </div>
